@@ -1,0 +1,79 @@
+{
+  "id": "1837891",
+  "name": "Vue01",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "iconfont图标使用学习",
+  "glyphs": [
+    {
+      "icon_id": "11474220",
+      "name": "bussiness-man",
+      "font_class": "bussiness-man",
+      "unicode": "e6ef",
+      "unicode_decimal": 59119
+    },
+    {
+      "icon_id": "11474234",
+      "name": "component",
+      "font_class": "component",
+      "unicode": "e6f2",
+      "unicode_decimal": 59122
+    },
+    {
+      "icon_id": "11474243",
+      "name": "copy",
+      "font_class": "copy",
+      "unicode": "e6f3",
+      "unicode_decimal": 59123
+    },
+    {
+      "icon_id": "11481357",
+      "name": "play-fill",
+      "font_class": "play-fill",
+      "unicode": "e72f",
+      "unicode_decimal": 59183
+    },
+    {
+      "icon_id": "11487970",
+      "name": "add-account",
+      "font_class": "add-account",
+      "unicode": "e741",
+      "unicode_decimal": 59201
+    },
+    {
+      "icon_id": "11487990",
+      "name": "atm-away",
+      "font_class": "atm-away",
+      "unicode": "e744",
+      "unicode_decimal": 59204
+    },
+    {
+      "icon_id": "11487997",
+      "name": "calculator",
+      "font_class": "calculator",
+      "unicode": "e746",
+      "unicode_decimal": 59206
+    },
+    {
+      "icon_id": "11488010",
+      "name": "confirm",
+      "font_class": "confirm",
+      "unicode": "e749",
+      "unicode_decimal": 59209
+    },
+    {
+      "icon_id": "11488017",
+      "name": "cry",
+      "font_class": "cry",
+      "unicode": "e74a",
+      "unicode_decimal": 59210
+    },
+    {
+      "icon_id": "11488057",
+      "name": "image-text",
+      "font_class": "image-text",
+      "unicode": "e753",
+      "unicode_decimal": 59219
+    }
+  ]
+}
