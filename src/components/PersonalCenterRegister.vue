@@ -40,6 +40,7 @@
  import updata from "@/api/updata";
 import sendmail from "@/api/sendmail";
 import getmail from "@/api/getmail";
+import md5 from 'js-md5';
 export default {
   //name: "Register",
   name:"PersonalCenterRegister", 
@@ -97,6 +98,7 @@ export default {
       }
     };
     return { 
+      code:null,
       info:null, 
       ruleForm2: {
         pass: "",
@@ -125,41 +127,50 @@ export default {
       if (this.checkMail(tel)) {
         console.log(tel)
         let time = 60
-        this.buttonText = '已发送'
+      
+     
+         this.buttonText = '正在发送'
         var newdate=new Date()
         var newdata={}
         var xcode=this.createSixNum()
-        alert(xcode)
+        console.log(xcode)
+        this.code=xcode
         newdata={"tomail":this.ruleForm2.mail,"islive":"yes","maildate":newdate,"code":xcode}
  sendmail(newdata).then(res=>{
-      if(res.data==="yes"){
-setTimeout(() => {
-            alert('发送成功')
-          }, 400);
-      }else{
-        setTimeout(() => {
-            alert('发送失败')
-          }, 400);
-      }
-              
-})
-
+    // alert(res.data.success)
+     //console.log(res.response.data.success)
+      
+      //alert(res.data["success"])
+       this.buttonText = '已发送'
         this.isDisabled = true
-        if (this.flag) {
+         if (this.flag) {
           this.flag = false;
           let timer = setInterval(() => {
             time--;
             this.buttonText = time + ' 秒'
-            if (time === 0) {
+            if ((time === 0) || (this.flag===true) ) {
               clearInterval(timer);
               this.buttonText = '重新获取'
               this.isDisabled = false
               this.flag = true;
             }
           }, 1000)
-        }
+        }        
+}).catch(error=>{
+  switch(error.response.status){
+    case 700:
+      console.log(error.response.data.error)
+      alert(error.response.data.error)
+    break;
+  }
+    this.buttonText = '发送失败请重新尝试'
+    this.isDisabled = false
+
+})
+
       }
     },
+
     createSixNum(){
         var Num="";
         for(var i=0;i<6;i++)
@@ -168,26 +179,53 @@ setTimeout(() => {
         }
         return Num;
    },
+   checkCode(){
+     if(this.ruleForm2.smscode===this.code){
+       return true;
+     }
+     else{
+       return false;
+     }
+   },
     // <!--提交注册-->
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          if(!this.checkCode(this.code)){
+            alert('验证码错误')
+            this.ruleForm2.smscode=""
+          }
+          else{
           var newdata={}
-          newdata={"username":this.ruleForm2.mail,"password":this.ruleForm2.pass,"token":"123"}   
-      updata(newdata)
-    .then(res=>{
-      if(res.data==="yes"){
-setTimeout(() => {
-            alert('注册成功')
-          }, 400);
-      }else{
-        setTimeout(() => {
-            alert('注册失败')
-          }, 400);
-      }
-              
-})
+          var md5password=md5(this.ruleForm2.pass)
+          var token=md5(this.ruleForm2.mail+this.ruleForm2.password)
+          newdata={"username":this.ruleForm2.mail,"password":md5password,"token":token}   
+      updata(newdata).then(res=>{
+        console.log(res.status)
+        if(res.data["success"]===1){
+this.$router.push({
+        path: "/PersonalCenterLogin"
+      });
+        }
+        else{
+           this.buttonText = '重新获取'
+              this.isDisabled = false
+              this.flag = true;
+        }
+    alert(res.data["error"])
+    // console.log(res.data["success"])
+    // console.log(res.data)
+
           
+         
+      }).catch(error=>{
+      
+        
+      })
+
+
+          
+      }
         } else {
           console.log("error submit!!");
           return false;

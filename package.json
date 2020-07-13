@@ -10,8 +10,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "Math": "0.0.1-security",
     "axios": "^0.19.2",
     "element-ui": "^2.13.2",
+    "js-md5": "^0.7.3",
     "mint-ui": "^2.2.13",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"

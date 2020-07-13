@@ -4,31 +4,29 @@
       <div id="register">
         <p class="title">忘记密码</p>
         <el-form
-          :model="ruleForm2"
+          :model="ruleForm1"
           status-icon
           :rules="rules2"
-          ref="ruleForm2"
+          ref="ruleForm1"
           label-width="0"
           class="demo-ruleForm"
         >
-          <el-form-item prop="tel">
-            <el-input v-model="ruleForm2.tel" auto-complete="off" placeholder="请输入手机号"></el-input>
-          </el-form-item>
+         
            <el-form-item prop="mail">
-            <el-input v-model="ruleForm2.mail" auto-complete="off" placeholder="请输入邮箱地址"></el-input>
+            <el-input v-model="ruleForm1.mail" auto-complete="off" placeholder="请输入邮箱地址"></el-input>
           </el-form-item>
           <el-form-item prop="smscode" class="code">
-            <el-input v-model="ruleForm2.smscode" placeholder="验证码"></el-input>
+            <el-input v-model="ruleForm1.smscode" placeholder="验证码"></el-input>
             <el-button type="primary" :disabled='isDisabled' @click="sendCode">{{buttonText}}</el-button>
           </el-form-item>
           <el-form-item prop="pass">
-            <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="输入密码"></el-input>
+            <el-input type="password" v-model="ruleForm1.pass" auto-complete="off" placeholder="输入密码"></el-input>
           </el-form-item>
           <el-form-item prop="checkPass">
-            <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="确认密码"></el-input>
+            <el-input type="password" v-model="ruleForm1.checkPass" auto-complete="off" placeholder="确认密码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm2')" style="width:100%;">确认</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm1')" style="width:100%;">确认</el-button>
   
           </el-form-item>
         </el-form>
@@ -68,8 +66,8 @@ export default {
          callback(new Error('密码格式不正确，密码长度大于6位且数字字母混合'))
       }
       else {
-        if (this.ruleForm2.checkPass !== "") {
-          this.$refs.ruleForm2.validateField("checkPass");
+        if (this.ruleForm1.checkPass !== "") {
+          this.$refs.ruleForm1.validateField("checkPass");
         }
         callback()
       }
@@ -78,24 +76,22 @@ export default {
     let validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm2.pass) {
+      } else if (value !== this.ruleForm1.pass) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
       }
     };
     return {  
-      ruleForm2: {
+      ruleForm1: {
         pass: "",
         checkPass: "",
-        tel: "",
         smscode: "",
         mail:""
       },
       rules2: {
         pass: [{ validator: validatePass, trigger: 'change' }],
         checkPass: [{ validator: validatePass2, trigger: 'change' }],
-        tel: [{ validator: checkTel, trigger: 'change' }],
         smscode: [{ validator: checkSmscode, trigger: 'change' }],
         mail: [{ validator: checkMa, trigger: 'change' }],
       },
@@ -107,9 +103,8 @@ export default {
   methods: {
     // <!--发送验证码-->
     sendCode () {
-      let tel = this.ruleForm2.tel
-      if (this.checkMobile(tel)) {
-        console.log(tel)
+     
+      if (true) {
         let time = 60
         this.buttonText = '已发送'
         this.isDisabled = true

@@ -15,7 +15,8 @@
            <el-form-item prop="mail">
             <el-input v-model="ruleForm2.mail" auto-complete="off" placeholder="请输入邮箱地址"></el-input>
           </el-form-item>
-          <el-form-item prop="p            <el-input type="password" v-model="ruleForm2.password" auto-complete="off" placeholder="输入密码"></el-input>
+          <el-form-item prop="pass">
+            <el-input type="password" v-model="ruleForm2.password" auto-complete="off" placeholder="输入密码"></el-input>
           </el-form-item>
           <el-form-item prop="info">
             <el-input  v-model="info" auto-complete="off" placeholder="请输入验证码"></el-input>
