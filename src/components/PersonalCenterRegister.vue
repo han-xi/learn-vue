@@ -11,9 +11,9 @@
           label-width="0"
           class="demo-ruleForm"
         >
-          <el-form-item prop="tel">
+          <!-- <el-form-item prop="tel">
             <el-input v-model="ruleForm2.tel" auto-complete="off" placeholder="请输入手机号"></el-input>
-          </el-form-item>
+          </el-form-item> -->
            <el-form-item prop="mail">
             <el-input v-model="ruleForm2.mail" auto-complete="off" placeholder="请输入邮箱地址"></el-input>
           </el-form-item>
@@ -37,7 +37,9 @@
   </div>
 </template>
 <script> 
- import axios from 'axios'
+ import updata from "@/api/updata";
+import sendmail from "@/api/sendmail";
+import getmail from "@/api/getmail";
 export default {
   //name: "Register",
   name:"PersonalCenterRegister", 
@@ -65,7 +67,7 @@ export default {
     //  <!--验证码是否为空-->
     let checkSmscode = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入手机验证码'))
+        callback(new Error('请输入验证码'))
       } else {
         callback()
       }
@@ -99,14 +101,14 @@ export default {
       ruleForm2: {
         pass: "",
         checkPass: "",
-        tel: "",
+        // tel: "",
         smscode: "",
         mail:""
       },
       rules2: {
         pass: [{ validator: validatePass, trigger: 'change' }],
         checkPass: [{ validator: validatePass2, trigger: 'change' }],
-        tel: [{ validator: checkTel, trigger: 'change' }],
+        // tel: [{ validator: checkTel, trigger: 'change' }],
         smscode: [{ validator: checkSmscode, trigger: 'change' }],
         mail: [{ validator: checkMa, trigger: 'change' }],
       },
@@ -116,14 +118,32 @@ export default {
     }
   }, 
   methods: {
-
+   
     // <!--发送验证码-->
     sendCode () {
-      let tel = this.ruleForm2.tel
-      if (this.checkMobile(tel)) {
+      let tel = this.ruleForm2.mail
+      if (this.checkMail(tel)) {
         console.log(tel)
         let time = 60
         this.buttonText = '已发送'
+        var newdate=new Date()
+        var newdata={}
+        var xcode=this.createSixNum()
+        alert(xcode)
+        newdata={"tomail":this.ruleForm2.mail,"islive":"yes","maildate":newdate,"code":xcode}
+ sendmail(newdata).then(res=>{
+      if(res.data==="yes"){
+setTimeout(() => {
+            alert('发送成功')
+          }, 400);
+      }else{
+        setTimeout(() => {
+            alert('发送失败')
+          }, 400);
+      }
+              
+})
+
         this.isDisabled = true
         if (this.flag) {
           this.flag = false;
@@ -140,18 +160,34 @@ export default {
         }
       }
     },
+    createSixNum(){
+        var Num="";
+        for(var i=0;i<6;i++)
+        {
+            Num+=Math.floor(Math.random()*10);
+        }
+        return Num;
+   },
     // <!--提交注册-->
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-         
-axios.post(`/static/data.json`,{username:this.ruleForm2.mail,password:this.ruleForm2.pass})
-.then(res=>{
-    console.log('res=>',res);this.info=res;            
-})
-          setTimeout(() => {
+          var newdata={}
+          newdata={"username":this.ruleForm2.mail,"password":this.ruleForm2.pass,"token":"123"}   
+      updata(newdata)
+    .then(res=>{
+      if(res.data==="yes"){
+setTimeout(() => {
             alert('注册成功')
           }, 400);
+      }else{
+        setTimeout(() => {
+            alert('注册失败')
+          }, 400);
+      }
+              
+})
+          
         } else {
           console.log("error submit!!");
           return false;
@@ -164,15 +200,15 @@ axios.post(`/static/data.json`,{username:this.ruleForm2.mail,password:this.ruleF
         path: "/PersonalCenterLogin"
       });
     },
-    // 验证手机号
-    checkMobile(str) {
-      let re = /^1\d{10}$/
-      if (re.test(str)) {
-        return true;
-      } else {
-        return false;
-      }
-    },
+    // // 验证手机号
+    // checkMobile(str) {
+    //   let re = /^1\d{10}$/
+    //   if (re.test(str)) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // },
     checkMail(str){
          let re = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
       if (re.test(str)) {

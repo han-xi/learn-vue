@@ -15,8 +15,7 @@
            <el-form-item prop="mail">
             <el-input v-model="ruleForm2.mail" auto-complete="off" placeholder="请输入邮箱地址"></el-input>
           </el-form-item>
-          <el-form-item prop="pass">
-            <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="输入密码"></el-input>
+          <el-form-item prop="p            <el-input type="password" v-model="ruleForm2.password" auto-complete="off" placeholder="输入密码"></el-input>
           </el-form-item>
           <el-form-item prop="info">
             <el-input  v-model="info" auto-complete="off" placeholder="请输入验证码"></el-input>
@@ -39,7 +38,8 @@
   </div>
 </template>
 <script> 
-import axios from 'axios'
+import loaddata from "@/api/loaddata";
+import md5 from 'js-md5';
 export default {
   //name: "Register",
   name:"PersonalCenterLogin", 
@@ -59,7 +59,7 @@ export default {
       if (value === "") {
         callback(new Error("请输入密码"))
       } else if(!this.checkPass(value)){
-         callback(new Error('密码格式不正确，密码长度大于6位且数字字母混合'))
+         callback(new Error(' '))
       }
       else {
         callback()
@@ -69,12 +69,12 @@ export default {
         vercode:'',
 info:'',
       ruleForm2: {
-        pass: "",
+        password: "",
         mail:"",
 
       },
       rules2: {
-        pass: [{ validator: validatePass, trigger: 'change' }],
+        password: [{ validator: validatePass, trigger: 'change' }],
         mail: [{ validator: checkMa, trigger: 'change' }],
 
       },
@@ -85,30 +85,40 @@ info:'',
   methods: {
     login(){
    const self = this;
- 
    if(this.info===''){
      alert ('验证失败');
    }
-   axios.get('/static/data.json').then(response=>{
-    var res =response.data.data,
-      len = res.length,
-      userNameArr= [],
-      passWordArr= [],
+   var password1=md5(this.ruleForm2.password)
+   loaddata(this.ruleForm2.mail,password1).then(response=>{
+   //console.log(response.status);
+    var res =response.data,
+      // len = res.length,
+      // userNameArr= [],
+      // passWordArr= [],
       ses= window.sessionStorage; 
+      // console.log(res);
+      // console.log(res.password);
+      // console.log(res);
     // 拿到所有的username
-    for(var i=0; i<len; i++){
-     userNameArr.push(res[i].username);
-     passWordArr.push(res[i].password);
-    }
-    console.log(userNameArr, passWordArr);
-    if(userNameArr.indexOf(this.ruleForm2.mail) === -1){
-      alert('没有该用户，请注册！')
-    }else{
-     var index = userNameArr.indexOf(this.ruleForm2.mail);
-     if(passWordArr[index] === this.ruleForm2.pass){
+    // for(var i=0; i<len; i++){
+    //  userNameArr.push(res[i].username);
+    //  passWordArr.push(res[i].password);
+    // }
+    // console.log(userNameArr, passWordArr);
+    // //if(res.username==="error"){
+    // if(userNameArr.indexOf(this.ruleForm2.mail) === -1){
+    //   alert('没有该用户，请注册！')
+    // }else{
+    // var index = userNameArr.indexOf(this.ruleForm2.mail);
+    // var md5password=md5(this.ruleForm2.pass)
+    //if(passWordArr[index] === md5password){
+      //if(res.password===this.ruleForm2.pass){
       // 把token放在sessionStorage中
-      ses.setItem('data', res[index].token);
-      alert(res[index].token);
+ 
+       ses.setItem('data', res.token);
+      // alert(res[index].token);
+      //ses.setItem('data', res.token);
+     // alert(res.token);
       //验证成功进入首页
       //this.startHacking ('登录成功！');
       //跳转到首页
@@ -116,12 +126,27 @@ info:'',
         path: "/PersonalCenter"
       });
       // console.log(this.$router);
-     }else{
-      alert('密码错误！')
-     }
+     //}else{
+      //alert('密码错误！')
+     //}
+    //}
+   }).catch(error=>{
+        console.log(error.response.data.error)
+     //console.log('error.response.status');
+    console.log(error.response.status)
+    switch(error.response.status){
+      case 502:
+        alert(error.response.data.error)
+    
+        break;
+      case 404:
+        alert(error.response.data.error)
+        break;
+      default:
+          break;
+      
     }
-   }).catch(err=>{
-    console.log('连接数据库失败！')
+        this.createCode()
    })
   },
     // <!--提交登录-->
