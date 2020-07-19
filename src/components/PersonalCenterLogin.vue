@@ -89,49 +89,18 @@ info:'',
    if(this.info===''){
      alert ('验证失败');
    }
+   //密码md5加密
    var password1=md5(this.ruleForm2.password)
    loaddata(this.ruleForm2.mail,password1).then(response=>{
    //console.log(response.status);
-    var res =response.data,
-      // len = res.length,
-      // userNameArr= [],
-      // passWordArr= [],
-      ses= window.sessionStorage; 
-      // console.log(res);
-      // console.log(res.password);
-      // console.log(res);
-    // 拿到所有的username
-    // for(var i=0; i<len; i++){
-    //  userNameArr.push(res[i].username);
-    //  passWordArr.push(res[i].password);
-    // }
-    // console.log(userNameArr, passWordArr);
-    // //if(res.username==="error"){
-    // if(userNameArr.indexOf(this.ruleForm2.mail) === -1){
-    //   alert('没有该用户，请注册！')
-    // }else{
-    // var index = userNameArr.indexOf(this.ruleForm2.mail);
-    // var md5password=md5(this.ruleForm2.pass)
-    //if(passWordArr[index] === md5password){
-      //if(res.password===this.ruleForm2.pass){
-      // 把token放在sessionStorage中
- 
-       ses.setItem('data', res.token);
-      // alert(res[index].token);
-      //ses.setItem('data', res.token);
-     // alert(res.token);
-      //验证成功进入首页
-      //this.startHacking ('登录成功！');
+      var res =response.data,
+      ses= window.sessionStorage;  
+      ses.setItem('data', res.token);
       //跳转到首页
       this.$router.push({
         path: "/PersonalCenter"
       });
-      // console.log(this.$router);
-     //}else{
-      //alert('密码错误！')
-     //}
-    //}
-   }).catch(error=>{
+     }).catch(error=>{
         console.log(error.response.data.error)
      //console.log('error.response.status');
     console.log(error.response.status)
@@ -212,7 +181,7 @@ info:'',
                 this.info = ''
                 alert('验证码不正确，请重新输入');
             }else {
-                alert('输入正确')
+            
             }
         }
 

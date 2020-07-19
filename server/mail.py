@@ -14,7 +14,7 @@ mail = Blueprint('mail', __name__)
 def sendmail():
     data = request.get_data()
     data = json.loads(data)
-    print(type(data))
+    #print(type(data))
     mails = client.mail.find_one({"tomail":data["tomail"]})
     if mails == None:
         client.mail.insert(data)
@@ -44,24 +44,20 @@ def sendmail():
     try:
         # 开启发信服务，这里使用的是加密传输
         server = smtplib.SMTP_SSL(smtp_server)
-        print("1--------")
         server.connect(smtp_server,465)
         # 登录发信邮箱
-        print("2--------")
         server.login(from_addr, password)
         # 发送邮件
-        print("3--------")
         server.sendmail(from_addr, to_addr, msg.as_string())
         # 关闭服务器
         server.quit() 
     except:
         return jsonify({
             "error":"发送邮件失败"
-        },700)
+        }),700
     else:
         return jsonify({
-            "success":"发送成功"
-            
+            "success":"发送成功" 
         })
 
 # @mail.route('/mail', methods=["GET"])

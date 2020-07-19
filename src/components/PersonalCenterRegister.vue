@@ -127,9 +127,7 @@ export default {
       if (this.checkMail(tel)) {
         console.log(tel)
         let time = 60
-      
-     
-         this.buttonText = '正在发送'
+        this.buttonText = '正在发送'
         var newdate=new Date()
         var newdata={}
         var xcode=this.createSixNum()
@@ -137,6 +135,7 @@ export default {
         this.code=xcode
         newdata={"tomail":this.ruleForm2.mail,"islive":"yes","maildate":newdate,"code":xcode}
  sendmail(newdata).then(res=>{
+   //发送成功
     // alert(res.data.success)
      //console.log(res.response.data.success)
       
@@ -158,6 +157,7 @@ export default {
         }        
 }).catch(error=>{
   switch(error.response.status){
+    //发送邮件失败
     case 700:
       console.log(error.response.data.error)
       alert(error.response.data.error)
@@ -170,7 +170,7 @@ export default {
 
       }
     },
-
+//产生随机六位数
     createSixNum(){
         var Num="";
         for(var i=0;i<6;i++)
@@ -178,7 +178,7 @@ export default {
             Num+=Math.floor(Math.random()*10);
         }
         return Num;
-   },
+   },//检查输入激活验证码是否正确
    checkCode(){
      if(this.ruleForm2.smscode===this.code){
        return true;
@@ -191,6 +191,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          //邮件验证码检测
           if(!this.checkCode(this.code)){
             alert('验证码错误')
             this.ruleForm2.smscode=""
@@ -201,25 +202,30 @@ export default {
           var token=md5(this.ruleForm2.mail+this.ruleForm2.password)
           newdata={"username":this.ruleForm2.mail,"password":md5password,"token":token}   
       updata(newdata).then(res=>{
-        console.log(res.status)
-        if(res.data["success"]===1){
+        //注册成功
+    alert(res.data["error"])
 this.$router.push({
         path: "/PersonalCenterLogin"
       });
-        }
-        else{
-           this.buttonText = '重新获取'
-              this.isDisabled = false
-              this.flag = true;
-        }
-    alert(res.data["error"])
+    
     // console.log(res.data["success"])
     // console.log(res.data)
 
           
          
       }).catch(error=>{
-      
+        //用户已经存在
+        switch(error.response.status){
+          case 404:
+            alert(error.response.data.error)
+            this.buttonText = '重新获取'
+            this.isDisabled = false
+            this.flag = true;
+            break;
+          default:
+            
+        }
+    
         
       })
 
