@@ -156,16 +156,36 @@ export default {
           }, 1000)
         }        
 }).catch(error=>{
+  
+
+  if(error&&error.response){
+
+  
   switch(error.response.status){
     //发送邮件失败
     case 700:
       console.log(error.response.data.error)
       alert(error.response.data.error)
-    break;
-  }
-    this.buttonText = '发送失败请重新尝试'
+      this.buttonText = '发送失败请重新尝试'
     this.isDisabled = false
+      break
+    case 302:
+      console.log(error.response.data)
+       this.$router.push({
+        path: error.response.data
+      });
+    default:
+      break
 
+  }
+    
+  }else{
+    this.$router.push({
+        path: error.response.data.error
+      });
+    console.log( error.response.data)
+    //alert("连接错误")
+  }
 })
 
       }
@@ -216,12 +236,12 @@ this.$router.push({
       }).catch(error=>{
         //用户已经存在
         switch(error.response.status){
-          case 404:
+          case 503:
             alert(error.response.data.error)
             this.buttonText = '重新获取'
             this.isDisabled = false
-            this.flag = true;
-            break;
+            this.flag = true
+             break;
           default:
             
         }
