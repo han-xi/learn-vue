@@ -5,6 +5,7 @@ client = MongoDBClient233()
 
 loaddata = Blueprint('loaddata', __name__)
 @loaddata.route('/loaddata', methods=["POST"])
+
 def loadData():
     data = request.get_data()
     data = json.loads(data)

@@ -91,7 +91,8 @@ info:'',
    }
    //密码md5加密
    var password1=md5(this.ruleForm2.password)
-   loaddata(this.ruleForm2.mail,password1).then(response=>{
+   var userdata={"username":this.ruleForm2.mail,"password":password1}
+   loaddata(userdata).then(response=>{
    //console.log(response.status);
       var res =response.data,
       ses= window.sessionStorage;  
@@ -101,7 +102,7 @@ info:'',
         path: "/PersonalCenter"
       });
      }).catch(error=>{
-        console.log(error.response.data.error)
+        //console.log(error.response.data.error)
      //console.log('error.response.status');
     console.log(error.response.status)
     switch(error.response.status){
