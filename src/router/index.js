@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {delCookie,getCookie} from '@/util/util'
+import {delCookie,getCookie} from '@/api/util/util'
 import PersonalCenter from '@/components/PersonalCenter'
 import PersonalCenterRegister from '@/components/PersonalCenterRegister'
 import PersonalCenterLogin from '@/components/PersonalCenterLogin'

@@ -24,22 +24,25 @@ def loadData():
     except:
         return jsonify({
             'error': "数据库连接失败",
-        }), 502
+        }), 311
     else:
         if userdata == None:
             return jsonify({
                 'error': "user not found.",
-            }), 502
+            }), 311
         else:
             if data['password'] == userdata["password"]:
-                session['user_info']=data['username']
+                session['user_id']=data['username']
+                session.permanent = True
                 del userdata["_id"]
-
-                return jsonify(userdata)
+                temp={}
+                temp.update({"errCode":2})
+                temp.update({"token":userdata["token"]})
+                return jsonify(temp)
             else:
                 return jsonify({
                 'error': "密码错误.",
-                }), 502
+                }), 311
             # pa=[]
             # del userdata["_id"] 
             # for i in userdata:

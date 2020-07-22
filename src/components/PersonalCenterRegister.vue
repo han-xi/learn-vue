@@ -181,10 +181,8 @@ export default {
     
   }else{
 
-    this.$router.push({
-        path: error.response
-      });
-    console.log( error.response.data)
+  
+    
     //alert("连接错误")
   }
 })

@@ -56,7 +56,8 @@ def sendmail():
             server.quit() 
         except:
             return jsonify({
-                "error":"发送邮件失败"
+                "error":"发送邮件失败",
+                "errCode":2
             }),700
         else:
             return jsonify({
