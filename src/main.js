@@ -7,7 +7,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 Vue.use(Element)
-import axios from './api/config.js'
+import ajax from './api/config.js'
 
 //import Mint from 'mint-ui';
 //import 'mint-ui/lib/style.css';
@@ -15,7 +15,7 @@ import axios from './api/config.js'
 
 
 import  './assets/icon/iconfont.css';
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+//axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 
 Vue.config.productionTip = false
@@ -27,4 +27,3 @@ new Vue({
   components: { App },
   template: '<App>'
 })
-//路由守卫

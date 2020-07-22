@@ -40,6 +40,7 @@
 </template>
 <script> 
 import loaddata from "@/api/loaddata";
+import {setCookie} from "@/api/util/util"
 import md5 from 'js-md5';
 export default {
   //name: "Register",
@@ -92,15 +93,27 @@ info:'',
    //密码md5加密
    var password1=md5(this.ruleForm2.password)
    var userdata={"username":this.ruleForm2.mail,"password":password1}
-   loaddata(userdata).then(response=>{
+   //(userdata).then(response=>{
+     loaddata(userdata).then(response=>{
+     // axios.post('/loaddata',userdata).then(response=>{
    //console.log(response.status);
       var res =response.data,
-      ses= window.sessionStorage;  
+      ses= window.sessionStorage; 
+      let expireDays = 7  ;//生存周期为一天
+      console.log("----------1")
+      setCookie('session',res.token,expireDays); //设置Session
+      setCookie('u_uuid',this.ruleForm2.mail,expireDays); //设置用户编号 
       ses.setItem('data', res.token);
+      console.log("----------2")
+       if(this.$route.query.redirect) {
+         this.$router.push(this.$route.query.redirect);
+        } else {
+         this.$router.push('/PersonalCenter'); //跳转用户中心页
+        }
       //跳转到首页
-      this.$router.push({
-        path: "/PersonalCenter"
-      });
+      // this.$router.push({
+      //   path: "/PersonalCenter"
+      // });
      }).catch(error=>{
         //console.log(error.response.data.error)
      //console.log('error.response.status');

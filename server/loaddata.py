@@ -8,7 +8,17 @@ loaddata = Blueprint('loaddata', __name__)
 
 def loadData():
     data = request.get_data()
+    head=str(request.headers)
+    print(head)
+    #print(request.getCookies())
+
+    print(str(request.cookies))
+    #print(str(request.cookies))
+    print("--------------")
+    #print (data["params"])
+    print(data)
     data = json.loads(data)
+    print(data)
     try: 
         userdata = client.info.find_one({"username":data['username']})
     except:

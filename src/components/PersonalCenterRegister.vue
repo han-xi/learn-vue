@@ -169,10 +169,10 @@ export default {
       this.buttonText = '发送失败请重新尝试'
     this.isDisabled = false
       break
-    case 302:
-      console.log(error.response.data)
+    case 301:
+      console.log(error.response)
        this.$router.push({
-        path: error.response.data
+        path: error.response
       });
     default:
       break
@@ -180,8 +180,9 @@ export default {
   }
     
   }else{
+
     this.$router.push({
-        path: error.response.data.error
+        path: error.response
       });
     console.log( error.response.data)
     //alert("连接错误")

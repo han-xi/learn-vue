@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import {delCookie,getCookie} from '@/util/util'
 import PersonalCenter from '@/components/PersonalCenter'
 import PersonalCenterRegister from '@/components/PersonalCenterRegister'
 import PersonalCenterLogin from '@/components/PersonalCenterLogin'
 import PersonalCenterForget from '@/components/PersonalCenterForget'
-
+import {post,fetch} from '@/api/config.js'
 
 Vue.use(Router)
 
@@ -61,4 +61,28 @@ const router= new Router({
 //    }
 //   }
 // })
+//路由守卫
+//这个是请求页面路由的时候会验证token存不存在，不存在的话会到登录页
+// router.beforeEach((to, from, next) => {
+//   if(to.meta.requireAuth) {
+//    fetch('/islogin').then(res => {
+//     if(res.errCode == 200) {
+//      next();
+//     } else {
+//      if(getCookie('session')) {
+//       delCookie('session');
+//      }
+//     //  if(getCookie('u_uuid')) {
+//     //   delCookie('u_uuid');
+//     //  }
+//      next({
+//       path: '/PersonalCenterLogin'
+//      });
+//     }
+//    });
+//   } else {
+//    next();
+//   }
+//  });
+
 export default router;
