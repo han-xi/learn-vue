@@ -24,8 +24,7 @@ def sendmail():
             client.mail.insert(data)
     except:
         return jsonify({
-            "error":"数据库连接失败"
-        }),700    
+        }),500    
     else:
         # 发信方的信息：发信邮箱，QQ 邮箱授权码
         from_addr = '1179865214@qq.com'
@@ -56,14 +55,9 @@ def sendmail():
             server.quit() 
         except:
             return jsonify({
-                "error":"发送邮件失败",
-                "errCode":2
-            }),700
+                "error":"发送失败"
+            }),510
         else:
             return jsonify({
-                "success":"发送成功" 
+               # "error":"发送成功" 
             })
-
-    # @mail.route('/mail', methods=["GET"])
-    # def getMail():
-    #     data = client.mail.find()

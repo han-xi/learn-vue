@@ -11,22 +11,24 @@
           label-width="0"
           class="demo-ruleForm"
         >
-          <!-- <el-form-item prop="tel">
-            <el-input v-model="ruleForm2.tel" auto-complete="off" placeholder="请输入手机号"></el-input>
-          </el-form-item> -->
-           <el-form-item prop="mail">
+          <!-- 用户名 -->
+          <el-form-item prop="mail">
             <el-input v-model="ruleForm2.mail" auto-complete="off" placeholder="请输入邮箱地址"></el-input>
           </el-form-item>
+          <!-- 邮件验证码 -->
           <el-form-item prop="smscode" class="code">
             <el-input v-model="ruleForm2.smscode" placeholder="验证码"></el-input>
             <el-button type="primary" :disabled='isDisabled' @click="sendCode">{{buttonText}}</el-button>
           </el-form-item>
+          <!-- 密码 -->
           <el-form-item prop="pass">
             <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="输入密码"></el-input>
           </el-form-item>
+          <!-- 确认密码 -->
           <el-form-item prop="checkPass">
             <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="确认密码"></el-input>
           </el-form-item>
+          <!-- 提交注册 -->
           <el-form-item>{{info}}
             <el-button type="primary" @click="submitForm('ruleForm2')" style="width:100%;">注册</el-button>
             <p class="login" @click="gotoLogin">已有账号？立即登录</p>
@@ -42,7 +44,6 @@ import sendmail from "@/api/sendmail";
 import getmail from "@/api/getmail";
 import md5 from 'js-md5';
 export default {
-  //name: "Register",
   name:"PersonalCenterRegister", 
   data() {
     // <!--验证手机号是否合法-->
@@ -103,14 +104,12 @@ export default {
       ruleForm2: {
         pass: "",
         checkPass: "",
-        // tel: "",
         smscode: "",
         mail:""
       },
       rules2: {
         pass: [{ validator: validatePass, trigger: 'change' }],
         checkPass: [{ validator: validatePass2, trigger: 'change' }],
-        // tel: [{ validator: checkTel, trigger: 'change' }],
         smscode: [{ validator: checkSmscode, trigger: 'change' }],
         mail: [{ validator: checkMa, trigger: 'change' }],
       },
@@ -126,70 +125,44 @@ export default {
       let tel = this.ruleForm2.mail
       if (this.checkMail(tel)) {
         console.log(tel)
-        let time = 60
-        this.buttonText = '正在发送'
-        var newdate=new Date()
-        var newdata={}
-        var xcode=this.createSixNum()
+        let time = 60;
+        this.buttonText = '正在发送';
+        var newdate=new Date();
+        var newdata={};
+        var xcode=this.createSixNum();
         console.log(xcode)
-        this.code=xcode
+        this.code=xcode;
         newdata={"tomail":this.ruleForm2.mail,"islive":"yes","maildate":newdate,"code":xcode}
- sendmail(newdata).then(res=>{
-   //发送成功
-    // alert(res.data.success)
-     //console.log(res.response.data.success)
-      
-      //alert(res.data["success"])
-       this.buttonText = '已发送'
-        this.isDisabled = true
-         if (this.flag) {
-          this.flag = false;
-          let timer = setInterval(() => {
-            time--;
-            this.buttonText = time + ' 秒'
-            if ((time === 0) || (this.flag===true) ) {
-              clearInterval(timer);
-              this.buttonText = '重新获取'
+        sendmail(newdata).then(res=>{
+          //发送成功
+          this.buttonText = '已发送'
+          this.isDisabled = true
+          if (this.flag) {
+            this.flag = false;
+            let timer = setInterval(() => {
+              time--;
+              this.buttonText = time + ' 秒'
+              if ((time === 0) || (this.flag===true) ) {
+                clearInterval(timer);
+                this.buttonText = '重新获取'
+                this.isDisabled = false
+                this.flag = true;
+              }
+            }, 1000)
+          }        
+        }).catch(error=>{
+            if(error.response){
+              alert(error.response.data.error)
+              this.buttonText = '发送失败请重新尝试'
               this.isDisabled = false
-              this.flag = true;
+            }else{
+              
             }
-          }, 1000)
-        }        
-}).catch(error=>{
-  
-
-  if(error&&error.response){
-
-  
-  switch(error.response.status){
-    //发送邮件失败
-    case 700:
-      console.log(error.response.data.error)
-      alert(error.response.data.error)
-      this.buttonText = '发送失败请重新尝试'
-    this.isDisabled = false
-      break
-    case 301:
-      console.log(error.response)
-       this.$router.push({
-        path: error.response
-      });
-    default:
-      break
-
-  }
-    
-  }else{
-
-  
-    
-    //alert("连接错误")
-  }
 })
 
       }
     },
-//产生随机六位数
+    // <!--产生随机六位数-->
     createSixNum(){
         var Num="";
         for(var i=0;i<6;i++)
@@ -197,7 +170,8 @@ export default {
             Num+=Math.floor(Math.random()*10);
         }
         return Num;
-   },//检查输入激活验证码是否正确
+   },
+   // <!--检查输入激活验证码是否正确-->
    checkCode(){
      if(this.ruleForm2.smscode===this.code){
        return true;
@@ -216,41 +190,26 @@ export default {
             this.ruleForm2.smscode=""
           }
           else{
-          var newdata={}
-          var md5password=md5(this.ruleForm2.pass)
-          var token=md5(this.ruleForm2.mail+this.ruleForm2.password)
-          newdata={"username":this.ruleForm2.mail,"password":md5password,"token":token}   
-      updata(newdata).then(res=>{
-        //注册成功
-    alert(res.data["error"])
-this.$router.push({
-        path: "/PersonalCenterLogin"
-      });
-    
-    // console.log(res.data["success"])
-    // console.log(res.data)
-
-          
-         
-      }).catch(error=>{
-        //用户已经存在
-        switch(error.response.status){
-          case 503:
-            alert(error.response.data.error)
-            this.buttonText = '重新获取'
-            this.isDisabled = false
-            this.flag = true
-             break;
-          default:
-            
-        }
-    
-        
-      })
-
-
-          
-      }
+            var newdata={}
+            var md5password=md5(this.ruleForm2.pass)
+            var token=md5(this.ruleForm2.mail+this.ruleForm2.password)
+            newdata={"username":this.ruleForm2.mail,"password":md5password,"token":token}   
+            updata(newdata).then(res=>{
+            //注册成功
+              alert("注册成功,跳转登录")
+              this.$router.push({
+                path: "/PersonalCenterLogin"
+              }); 
+            }).catch(error=>{
+            //用户已经存在
+            if(error.response){
+              alert(error.response.data.error)
+                  this.buttonText = '重新获取'
+                  this.isDisabled = false
+                  this.flag = true
+            }   
+            })
+          }
         } else {
           console.log("error submit!!");
           return false;
@@ -263,15 +222,7 @@ this.$router.push({
         path: "/PersonalCenterLogin"
       });
     },
-    // // 验证手机号
-    // checkMobile(str) {
-    //   let re = /^1\d{10}$/
-    //   if (re.test(str)) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // },
+    // <!--验证用户名格式-->
     checkMail(str){
          let re = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
       if (re.test(str)) {
@@ -280,6 +231,7 @@ this.$router.push({
         return false;
       }
     },
+    // <!--验证密码格式-->
     checkPass(str){
       let re =/^(?=.*[(a-z)|(A-Z)])(?=.*\d)[^]{6,16}$/
       if (re.test(str)) {
@@ -288,7 +240,7 @@ this.$router.push({
         return false;
       }
     }
-      }
+  }
 };
 </script>
 <style scoped>

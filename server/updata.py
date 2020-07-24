@@ -8,31 +8,23 @@ updata = Blueprint('updata', __name__)
 def up():
     data = request.get_data()
     data = json.loads(data)
-    #print(type(data))
     try:
         user = client.info.find_one({"username":data["username"]})
     except:
-         return jsonify({
-                "error":"数据库出现异常"
-            }),503
+         return jsonify({#数据库连接失败用500表示
+            }),500
     else:
         if user == None:
             try:
                 client.info.insert(data)
             except:
-                return jsonify({
-                    "error":"数据库出现异常"
-                }),503
+                return jsonify({#数据库连接失败用500表示
+                }),500
             else:
-                return jsonify({
-                    "error":"注册成功",
+                return jsonify({  
                 })
         else:
             return jsonify({
-                "error":"用户已注册",   
-            }),503
-
-
-    
-
-    
+                "error":"用户已注册",
+                
+            }),401
