@@ -1,5 +1,5 @@
 import ajax from "./config.js"
 
 export default (data)=>{
-    return ajax.post(`/loaddata`,data);
+    return ajax.post(`/userLogin`,data);
 }

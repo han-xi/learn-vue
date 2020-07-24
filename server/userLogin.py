@@ -1,30 +1,33 @@
 from flask import jsonify, Blueprint,request,session
 from mongoClient import MongoDBClient233
 import json
+import hashlib
 client = MongoDBClient233()
+def md5value(s):
+    md5 = hashlib.md5()
+    md5.update(s.encode())
+    return md5.hexdigest()
+userLogin = Blueprint('userLogin', __name__)
+@userLogin.route('/userLogin', methods=["POST"])
 
-loaddata = Blueprint('loaddata', __name__)
-@loaddata.route('/loaddata', methods=["POST"])
-
-def loadData():
-    data = request.get_data()
-    data = json.loads(data)
+def check_login():
+    userinfo = request.get_data()
+    userinfo = json.loads(userinfo)
     try: 
-        userdata = client.info.find_one({"username":data['username']})
+        db_userinfo = client.info.find_one({"username":userinfo['username']})
     except:
-        #print("122222")
         return jsonify({
         }), 500
     else:
-        if userdata == None:
+        if db_userinfo == None:
             return jsonify({
                 'error': "未发现用户.",
             }), 401
         else:
-            if data['password'] == userdata["password"]:
-                session['user_id']=data['username']
+            if md5value(db_userinfo["salt"]+userinfo['password'])== db_userinfo["password"]:
+                session['user_id']=userinfo['username']
                 session.permanent = True
-                del userdata["_id"]
+                del db_userinfo["_id"]
                 temp={}
                 temp.update({"errCode":3})
                 #temp.update({"token":userdata["token"]})

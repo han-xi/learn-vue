@@ -87,6 +87,7 @@ export default {
           }
           else{
               var password1=md5(this.Login.password)//密码md5加密
+              
               var userdata={"username":this.Login.mail,"password":password1}
               //发送用户名和密码到后端
               loaddata(userdata).then(response=>{
@@ -108,7 +109,7 @@ export default {
               }).catch(error=>{
                 if(error.response&&error.response.status){//错误状态用户密码或者用户
                   alert(error.response.data.error);
-                  //console.log("ass")
+                  
                 }
                 this.createCode()//出现错误之后更新验证码
               })

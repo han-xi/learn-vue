@@ -7,21 +7,21 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 CORS(app)
 
-from loaddata import loaddata
-from updata import updata
-from mail import mail
+from userLogin import userLogin
+from userRegister import userRegister
+from userMail import userMail
 import datetime
 # from search import search
-app.register_blueprint(loaddata, url_prefix='/')
-app.register_blueprint(updata, url_prefix='/')
-app.register_blueprint(mail, url_prefix='/')
+app.register_blueprint(userLogin, url_prefix='/')
+app.register_blueprint(userRegister, url_prefix='/')
+app.register_blueprint(userMail, url_prefix='/')
 app.secret_key='\xca\x0c\x86\x04\x98@\x02b\x1b7\x8c\x88]\x1b\xd7"+\xe6px@\xc3#\\'
 app.permanent_session_lifetime=datetime.timedelta(days=14)
 
 @app.before_request#执行所有装饰器都要执行当前装饰器(简洁版实现同样功能)
 def login_required():
     #request.cookies
-    if request.path in ['/loaddata','/mail','/updata']: #如果登录的路由是注册和登录就返会none
+    if request.path in ['/userLogin','/userRegister','/userMail']: #如果登录的路由是注册和登录就返会none
         return None
     print("------")
     #name=request.cookies.get("u_uuid")

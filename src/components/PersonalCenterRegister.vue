@@ -29,7 +29,7 @@
             <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="确认密码"></el-input>
           </el-form-item>
           <!-- 提交注册 -->
-          <el-form-item>{{info}}
+          <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm2')" style="width:100%;">注册</el-button>
             <p class="login" @click="gotoLogin">已有账号？立即登录</p>
           </el-form-item>
@@ -99,8 +99,7 @@ export default {
       }
     };
     return { 
-      code:null,
-      info:null, 
+      code:null, 
       ruleForm2: {
         pass: "",
         checkPass: "",
@@ -127,12 +126,8 @@ export default {
         console.log(tel)
         let time = 60;
         this.buttonText = '正在发送';
-        var newdate=new Date();
-        var newdata={};
-        var xcode=this.createSixNum();
-        console.log(xcode)
-        this.code=xcode;
-        newdata={"tomail":this.ruleForm2.mail,"islive":"yes","maildate":newdate,"code":xcode}
+        var newdata={}
+        newdata={"tomail":this.ruleForm2.mail}
         sendmail(newdata).then(res=>{
           //发送成功
           this.buttonText = '已发送'
@@ -171,29 +166,15 @@ export default {
         }
         return Num;
    },
-   // <!--检查输入激活验证码是否正确-->
-   checkCode(){
-     if(this.ruleForm2.smscode===this.code){
-       return true;
-     }
-     else{
-       return false;
-     }
-   },
+ 
     // <!--提交注册-->
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          //邮件验证码检测
-          if(!this.checkCode(this.code)){
-            alert('验证码错误')
-            this.ruleForm2.smscode=""
-          }
-          else{
             var newdata={}
             var md5password=md5(this.ruleForm2.pass)
-            var token=md5(this.ruleForm2.mail+this.ruleForm2.password)
-            newdata={"username":this.ruleForm2.mail,"password":md5password,"token":token}   
+            //var token=md5(this.ruleForm2.mail+this.ruleForm2.password)
+            newdata={"username":this.ruleForm2.mail,"password":md5password,"smscode":this.ruleForm2.smscode}   
             updata(newdata).then(res=>{
             //注册成功
               alert("注册成功,跳转登录")
@@ -209,7 +190,7 @@ export default {
                   this.flag = true
             }   
             })
-          }
+          
         } else {
           console.log("error submit!!");
           return false;
