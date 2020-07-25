@@ -7,11 +7,9 @@ from email.mime.text import MIMEText
 # email 用于构建邮件内容
 from email.header import Header
 from datetime import datetime
-import random,string
+from functions import genRandomString
 #
 
-def genRandomString(slen=6):
-    return ''.join(random.sample(string.ascii_letters + string.digits, slen))
 # 用于构建邮件头
 client = MongoDBClient233()
 
@@ -21,7 +19,7 @@ def send_mail():
     mail_name = request.get_data()
     mail_name = json.loads(mail_name)
     #print(type(data))
-    random_code=genRandomString()
+    random_code=genRandomString(6)
     try:
         db_mail = client.mail.find_one({"tomail":mail_name["tomail"]})
         now_time = datetime.now() #获得当前时间

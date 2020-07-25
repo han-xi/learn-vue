@@ -46,16 +46,6 @@ import md5 from 'js-md5';
 export default {
   name:"PersonalCenterRegister", 
   data() {
-    // <!--验证手机号是否合法-->
-    let checkTel = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入手机号码'))
-      } else if (!this.checkMobile(value)) {
-        callback(new Error('手机号码不合法'))
-      } else {
-        callback()
-      }
-    }
     //<!--验证邮箱是否正确-->
     let checkMa =(rule,value,callback)=>{
       if (value === '') {
@@ -157,15 +147,7 @@ export default {
 
       }
     },
-    // <!--产生随机六位数-->
-    createSixNum(){
-        var Num="";
-        for(var i=0;i<6;i++)
-        {
-            Num+=Math.floor(Math.random()*10);
-        }
-        return Num;
-   },
+ 
  
     // <!--提交注册-->
     submitForm(formName) {

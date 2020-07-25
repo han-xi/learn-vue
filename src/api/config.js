@@ -41,7 +41,6 @@ if(response.data&&response.data["errCode"] == 2) {
       })
       return new Promise(() => {})
     }
-   // console.log("1234")
     return response;
   },
   error => {
@@ -84,4 +83,14 @@ export function post(url, data = {}) {
        reject(err);
      })
  })
+}
+export function put(url, data = {}) {
+  return new Promise((resolve, reject) => {
+    axios.put(url, data)
+      .then(response => {
+        resolve(response.data);
+      }, err => {
+        reject(err);
+      })
+  })
 }

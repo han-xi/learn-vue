@@ -1,12 +1,8 @@
 from flask import jsonify, Blueprint,request,session
 from mongoClient import MongoDBClient233
 import json
-import hashlib
+from functions import md5value
 client = MongoDBClient233()
-def md5value(s):
-    md5 = hashlib.md5()
-    md5.update(s.encode())
-    return md5.hexdigest()
 userLogin = Blueprint('userLogin', __name__)
 @userLogin.route('/userLogin', methods=["POST"])
 

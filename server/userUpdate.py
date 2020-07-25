@@ -3,19 +3,18 @@ from mongoClient import MongoDBClient233
 import json
 from datetime import datetime
 import time
-from functions import md5value,genRandomString
-
+from functions import md5value
 client = MongoDBClient233()
 
 
-userRegister = Blueprint('userRegister', __name__)
-@userRegister.route('/userRegister', methods=["POST"])
-def check_register():
-    data = request.get_data()
-    data = json.loads(data)
+userUpdate = Blueprint('userUpdate', __name__)
+@userUpdate.route('/userUpdate', methods=["PUT"])
+def check_update():
+    postdata = request.get_data()
+    postdata = json.loads(postdata)
     try:
-        user = client.info.find_one({"username":data["username"]})
-        mail =client.mail.find_one({"tomail":data["username"]})
+        user = client.info.find_one({"username":postdata["username"]})
+        mail =client.mail.find_one({"tomail":postdata["username"]})
     except:
          return jsonify({#数据库连接失败用500表示
             }),500
@@ -31,26 +30,15 @@ def check_register():
             return jsonify({
                 "error":"验证码超时"
             }),510
-        elif data["smscode"]!=mail["code"]:
+        elif postdata["smscode"]!=mail["code"]:
             return jsonify({
                 "error":"验证码不正确"
             }),510
-        if user == None:
+        if user != None:
             try:
-                salt=genRandomString()
-                #print("221")
-                #print(type(data["password"]))
-                
-                md5password=md5value(salt+data["password"])
-                #print(md5password)
-                #print("--")
-                userinfo={}
-                userinfo.update({"username":data["username"]})
-                userinfo.update({"password":md5password})
-                userinfo.update({"registerdate":nowtime})
-                print("22")
-                userinfo.update({"salt":salt})
-                client.info.insert(userinfo)
+                salt=user["salt"]   
+                md5password=md5value(salt+postdata["password"])
+                client.info.update({"username":postdata["username"]},{"$set":{"password":md5password}})
             except:
                 return jsonify({#数据库连接失败用500表示
                 }),500
@@ -59,6 +47,5 @@ def check_register():
                 })
         else:
             return jsonify({
-                "error":"用户已注册",
-                
+                "error":"用户未注册",  
             }),401
