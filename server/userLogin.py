@@ -2,6 +2,7 @@ from flask import jsonify, Blueprint,request,session
 from mongoClient import MongoDBClient233
 import json
 from functions import md5value
+from datetime import datetime
 client = MongoDBClient233()
 userLogin = Blueprint('userLogin', __name__)
 @userLogin.route('/userLogin', methods=["POST"])
@@ -12,6 +13,7 @@ def check_login():
     try: 
         db_userinfo = client.info.find_one({"username":userinfo['username']})
     except:
+        #client.operatinglog.insert({"username":userinfo['username'],"path":"/userLogin","method":"POST","logdate":datetime.now(),"status":})
         return jsonify({
         }), 500
     else:
@@ -24,10 +26,9 @@ def check_login():
                 session['user_id']=userinfo['username']
                 session.permanent = True
                 del db_userinfo["_id"]
-                temp={}
-                temp.update({"errCode":3})
-                #temp.update({"token":userdata["token"]})
-                return jsonify(temp)
+                return jsonify({
+
+                })
             else:
                 return jsonify({
                 'error': "密码错误.",

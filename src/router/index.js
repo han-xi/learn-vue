@@ -6,6 +6,7 @@ import PersonalCenterRegister from '@/components/PersonalCenterRegister'
 import PersonalCenterLogin from '@/components/PersonalCenterLogin'
 import PersonalCenterForget from '@/components/PersonalCenterForget'
 import {post,fetch} from '@/api/config.js'
+import { TabPane } from 'element-ui'
 
 Vue.use(Router)
 
@@ -54,10 +55,10 @@ router.beforeEach((to, from, next)=>{
     }
   }else{
    // 如果没有session ,访问任何页面。都会进入到 登录页
-   if (to.path === '/') { // 如果是登录页面的话，直接next() -->解决注销后的循环执行bug
+   if (to.path === '/'||to.path==='/PersonalCenterRegister'||to.path==='/PersonalCenterForget'||to.path==='/PersonalCenterLogin') { // 如果是登录页面的话，直接next() -->解决注销后的循环执行bug
     next();
    } else { // 否则 跳转到登录页面
-    next({ path: '/' ,query: {redirect: to.fullPath} });
+    next({ path: '/PersonalCenterLogin' ,query: {redirect: to.fullPath} });
    }
   }
 })

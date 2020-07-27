@@ -17,5 +17,6 @@ class MongoDBClient233(object):
         print("233 mongo connected")
         self.info = self.db["info"]
         self.mail = self.db["mail"]
+        self.operatinglog=self.db["operatinglog"]
   
       

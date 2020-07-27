@@ -18,7 +18,6 @@ userMail = Blueprint('userMail', __name__)
 def send_mail():
     mail_name = request.get_data()
     mail_name = json.loads(mail_name)
-    #print(type(data))
     random_code=genRandomString(6)
     try:
         db_mail = client.mail.find_one({"tomail":mail_name["tomail"]})

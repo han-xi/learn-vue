@@ -41,7 +41,6 @@
 <script> 
  import updata from "@/api/updata";
 import sendmail from "@/api/sendmail";
-import getmail from "@/api/getmail";
 import md5 from 'js-md5';
 export default {
   name:"PersonalCenterRegister", 
@@ -110,10 +109,8 @@ export default {
   methods: {
    
     // <!--发送验证码-->
-    sendCode () {
-      let tel = this.ruleForm2.mail
-      if (this.checkMail(tel)) {
-        console.log(tel)
+    sendCode () { 
+      if (this.checkMail(this.ruleForm2.mail)) {
         let time = 60;
         this.buttonText = '正在发送';
         var newdata={}

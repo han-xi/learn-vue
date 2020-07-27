@@ -37,7 +37,6 @@
 </template>
 <script> 
 import loaddata from "@/api/loaddata";//登录post
-// import {setCookie,getCookie,delCookie} from "@/api/util/util"
 import md5 from 'js-md5';//密码加密
 export default {
   name:"PersonalCenterLogin", 
@@ -87,7 +86,6 @@ export default {
           }
           else{
               var password1=md5(this.Login.password)//密码md5加密
-              
               var userdata={"username":this.Login.mail,"password":password1}
               //发送用户名和密码到后端
               loaddata(userdata).then(response=>{

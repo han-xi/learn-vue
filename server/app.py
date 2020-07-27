@@ -1,4 +1,4 @@
-from flask import Flask,request,session,redirect,jsonify,url_for,abort,Response
+from flask import Flask,request,session,redirect,jsonify,Response
 from flask_cors import CORS
 
 from flask import jsonify
@@ -11,6 +11,7 @@ from userLogin import userLogin
 from userRegister import userRegister
 from userMail import userMail
 from userUpdate import userUpdate
+from userQuit import userQuit
 import datetime
 
 global username
@@ -19,6 +20,8 @@ app.register_blueprint(userLogin, url_prefix='/')
 app.register_blueprint(userRegister, url_prefix='/')
 app.register_blueprint(userMail, url_prefix='/')
 app.register_blueprint(userUpdate, url_prefix='/')
+app.register_blueprint(userQuit, url_prefix='/')
+
 app.secret_key='\xca\x0c\x86\x04\x98@\x02b\x1b7\x8c\x88]\x1b\xd7"+\xe6px@\xc3#\\'
 app.permanent_session_lifetime=datetime.timedelta(days=14)
 
@@ -45,5 +48,6 @@ def after_request(response):
     # 这里不能使用add方法，否则会出现 The 'Access-Control-Allow-Origin' header contains multiple values 的问题
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=9004, threaded=True, debug=True)
