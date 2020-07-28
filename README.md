@@ -1,21 +1,24 @@
-# vuedemo01
+# login
 
-> A Vue.js project
+##文件结构
 
-## Build Setup
 
-``` bash
-# install dependencies
-npm install
+###后端
+```
+./server
 
-# serve with hot reload at localhost:8080
-npm run dev
+```
+###前端
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
+```
+./src/components
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+###本地运行方式
+```
+
+npm install
+npm run dev
+sc server
+python app.py
+```
