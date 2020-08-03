@@ -1,9 +1,9 @@
 import axios from "axios"
-import {getCookie} from '@/api/util/util'
 import router from "@/router/index"
+import swal from 'sweetalert';
 
 const ajax=axios.create({
-  baseURL:"http://localhost:9004",
+  baseURL:"http://127.0.0.1:9004",
   timeout:50000,
   withCredentials :true,
 })
@@ -46,7 +46,7 @@ if(response.data&&response.data["errCode"] == 2) {
   error => {
     if(error.response &&error.response.status==401){//表示用户没有权限（令牌、用户名、密码错误）。
     if(error.response.data["errCode"]&&error.response.data["errCode"] == 2) {//如果是before_request中检测到丢失sessionid则重新登录
-      alert("请登录")
+      swal("请登录")
           router.push({
             path: '/PersonalCenterLogin',
            // query: {redirect: router.currentRoute.fullPath} //从哪个页面跳转
@@ -58,17 +58,23 @@ if(response.data&&response.data["errCode"] == 2) {
           //return new Promise(() => {})//终止
           return Promise.reject(error)
         }
+      }else if(error.response&&error.response.status==400){
+        return Promise.reject(error)
+      }
+      else if(error.response&&error.response.status==404){
+        return Promise.reject(error)
       }
       else if(error.response&&error.response.status===500){//数据库访问失败
-        alert("数据库连接失败")
-        return new Promise(() => {})//终止
+        swal("数据库连接失败")
+        //return new Promise(() => {})//终止
+        return Promise.reject(error)
       }
-    else if(error.response&&error.response.status===510){//邮件发送失败
+    else if(error.response&&error.response.status===501){//邮件发送失败
         return Promise.reject(error)
     }
     else
     {
-      alert(error.message)
+      swal(error.message)
       console.log('Error', error.message);
       return new Promise(() => {})//终止
       }
