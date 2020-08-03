@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {delCookie,getCookie} from '@/api/util/util'
-import PersonalCenter from '@/components/PersonalCenter'
-import PersonalCenterRegister from '@/components/PersonalCenterRegister'
-import PersonalCenterLogin from '@/components/PersonalCenterLogin'
-import PersonalCenterForget from '@/components/PersonalCenterForget'
+import PersonalCenter from '@/view/PersonalCenter'
+import PersonalCenterRegister from '@/view/PersonalCenterRegister'
+import PersonalCenterLogin from '@/view/PersonalCenterLogin'
+import PersonalCenterSetPassword from '@/view/PersonalCenterSetPassword'
+
+import PersonalCenterForget from '@/view/PersonalCenterForget'
 import {post,fetch} from '@/api/config.js'
 import { TabPane } from 'element-ui'
 
@@ -40,6 +41,11 @@ const router= new Router({
       name: 'PersonalCenterForget',
       component: PersonalCenterForget
     },
+    {
+      path: '/PersonalCenterSetPassword',
+      name: 'PersonalCenterSetPassword',
+      component: PersonalCenterSetPassword
+    },
   ]
 })
 
@@ -54,12 +60,13 @@ router.beforeEach((to, from, next)=>{
       next();
     }
   }else{
-   // 如果没有session ,访问任何页面。都会进入到 登录页
-   if (to.path === '/'||to.path==='/PersonalCenterRegister'||to.path==='/PersonalCenterForget'||to.path==='/PersonalCenterLogin') { // 如果是登录页面的话，直接next() -->解决注销后的循环执行bug
-    next();
-   } else { // 否则 跳转到登录页面
-    next({ path: '/PersonalCenterLogin' ,query: {redirect: to.fullPath} });
-   }
+    next()
+  //  // 如果没有session .
+  //  if (to.path === '/'||to.path==='/PersonalCenterRegister'||to.path==='/PersonalCenterForget'||to.path==='/PersonalCenterLogin') { // 如果是登录页面的话，直接next() -->解决注销后的循环执行bug
+  //   next();
+  //  } else { // 否则 跳转到登录页面
+  //   next({ path: '/PersonalCenterLogin' ,query: {redirect: to.fullPath} });
+  //  }
   }
 })
 export default router;
