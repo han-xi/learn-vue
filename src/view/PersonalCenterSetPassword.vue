@@ -11,8 +11,14 @@
           label-width="0"
           class="demo-ruleForm"
         >
-         
-          <!-- 密码 -->
+       
+          <!-- 旧密码 -->
+           
+          <el-form-item prop="oldpass" v-if="this.$route.query.username!=none">
+            <el-input type="password" v-model="SetPassword.oldpass" prefix-icon="el-icon-lock" auto-complete="off" placeholder="输入原密码"></el-input>
+          </el-form-item>
+        
+          <!-- 新密码 -->
           <el-form-item prop="pass">
             <el-input type="password" v-model="SetPassword.pass" prefix-icon="el-icon-lock" auto-complete="off" placeholder="输入密码"></el-input>
           </el-form-item>
@@ -24,6 +30,7 @@
           <el-form-item>
             <div v-if="this.$route.query.username===none">
             <el-button type="primary" @click="submitForm1('SetPassword')" :loading="flag"  style="width:100%;">提交</el-button>
+            <p class="login" @click="gotoLogin">已有账号？立即登录</p>
             </div>
              <div v-else>
             <el-button type="primary" @click="submitForm2('SetPassword')" :loading="flag" style="width:100%;">提交</el-button>
@@ -42,7 +49,17 @@ export default {
   name:"PersonalCenterSetPassword", 
   data() {
 
-
+// <!--验证密码-->
+    let validatePassOld = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"))
+      } else if(!this.checkPass(value)){
+         callback(new Error('密码格式不正确，密码长度大于6位且数字字母混合'))
+      }
+      else {
+        callback()
+      }
+    }
     // <!--验证密码-->
     let validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -65,18 +82,20 @@ export default {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
-      }
+      } 
     };
     return { 
        flag:false,
       SetPassword: {
         pass: "",
         checkPass: "",
+        oldpass:"",
       
       },
       rules2: {
         pass: [{ validator: validatePass, trigger: 'change' }],
-        checkPass: [{ validator: validatePass2, trigger: 'change' }]
+        checkPass: [{ validator: validatePass2, trigger: 'change' }],
+        oldpass: [{ validator: validatePassOld, trigger: 'change' }],
       },
     }
   }, 
@@ -112,7 +131,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
             this.flag=true
-         user.setpassword(this.SetPassword.pass).then(res=>{
+         user.setpassword(this.SetPassword.oldpass,this.SetPassword.pass).then(res=>{
              this.flag=false
             //注册成功
               swal("提交成功")
@@ -132,7 +151,12 @@ export default {
         }
       })
     },
-    
+        // <!--进入登录页-->
+    gotoLogin() {
+      this.$router.push({
+        path: "/PersonalCenterLogin"
+      });
+    },
     // <!--验证密码格式-->
     checkPass(str){
       let re =/^(?=.*[(a-z)|(A-Z)])(?=.*\d)[^]{6,16}$/
