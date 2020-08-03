@@ -11,9 +11,10 @@ export default{
     forget(username){
         return ajax.post(`/user/forget`, {"username":username});
     },
-    setpassword(password){
-        let md5password=md5(password)
-        return ajax.post(`/user/setpassword`, {"password":md5password});
+    setpassword(oldpassword,newpassword){
+        let oldmd5password=md5(oldpassword)
+        let newmd5password=md5(newpassword)
+        return ajax.post(`/user/setpassword`, {"oldpassword":oldmd5password ,"newpassword":newmd5password});
     },
     changepassword(password){
         let md5password=md5(password)
