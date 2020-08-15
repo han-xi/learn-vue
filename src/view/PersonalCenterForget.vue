@@ -62,7 +62,7 @@ export default {
             user.forget(this.forgetPassword.mail).then(res=>{
               this.flag=false
             //注册成功
-              swal("链接已发送请及时查收")
+              swal("亲爱的用户"+this.ruleForm2.mail+".我们还需要您登陆邮箱"+this.ruleForm2.mail+"来修改您的密码。\n您的邮箱会收到一封来自"+res.data.send_mail+"的邮件。如果长时间未收到，请检查垃圾邮件。\n注意：您如果不在"+res.data.send_time+"天之内激活账户，您的账号将删除。")
              
             }).catch(error=>{
               this.flag=false

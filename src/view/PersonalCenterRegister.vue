@@ -62,7 +62,8 @@ export default {
             user.register(this.ruleForm2.mail).then(res=>{
               this.flag=false
               //注册成功
-                swal("请及时查收链接")
+                swal("亲爱的用户"+this.ruleForm2.mail+",感谢您注册patent账号。\n为了更好的管理您的账号，方便使用系统全部功能，我们还需要您登陆邮箱"+this.ruleForm2.mail+"来激活您的账号。\n您的邮箱会收到一封来自"+res.data.send_mail+"激活邮件。如果长时间未收到，请检查垃圾邮件。\n注意：您如果不在"+res.data.send_time+"天之内激活账户，您的账号将删除。"
+)
               }).catch(error=>{
               //用户已经存在
               this.flag=false
